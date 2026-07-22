@@ -16,13 +16,13 @@ class Settings(BaseSettings):
     # AI
     gemini_api_key: str = ""
 
-
-
+    # Email
     smtp_host: str = "smtp.gmail.com"
     smtp_port: int = 587
     smtp_username: str = ""
     smtp_password: str = ""
     email_from: str = ""
+    brevo_api_key: str = ""
 
     # App
     frontend_url: str = "http://localhost:5173"
