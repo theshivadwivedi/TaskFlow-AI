@@ -345,23 +345,30 @@ function Dashboard() {
               </div>
             </div>
 
-            {/* filters */}
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm mb-4">
-              <div className="flex items-center gap-2">
-                <span className="text-[#A6A29C] mr-1">Priority</span>
-                {PRIORITY_FILTERS.map((f) => (
+              {/* filters */}
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm mb-4">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-[#A6A29C] mr-1">Priority</span>
+                  {PRIORITY_FILTERS.map((f) => (
+                    ...
+                  ))}
+                </div>
+              
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-[#A6A29C] mr-1">Status</span>
+                  {STATUS_FILTERS.map((f) => (
+                    ...
+                  ))}
+                </div>
+              
+                {hasActiveFilters && (
                   <button
-                    key={f.value}
-                    onClick={() => setPriorityFilter(f.value)}
-                    className={`px-3 py-1 rounded-full transition-colors duration-150 ${
-                      priorityFilter === f.value
-                        ? "bg-[#5C3A21] text-white"
-                        : "bg-white border border-[#E4DCC8] text-[#7A7266] hover:border-[#5C3A21]/40"
-                    }`}
+                    onClick={clearFilters}
+                    className="text-red-700/70 hover:text-red-700 ml-auto"
                   >
-                    {f.label}
+                    Clear filters
                   </button>
-                ))}
+                )}
               </div>
 
               <div className="flex items-center gap-2">
