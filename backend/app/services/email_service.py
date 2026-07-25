@@ -1,12 +1,17 @@
 import asyncio
 import logging
-from email.message import EmailMessage
 
-import aiosmtplib
+from brevo import Brevo
+from brevo.transactional_emails import (
+    SendTransacEmailRequestSender,
+    SendTransacEmailRequestToItem,
+)
 
 from app.config import settings
 
 logger = logging.getLogger("email_service")
+
+_client = Brevo(api_key=settings.brevo_api_key)
 
 
 def _build_reset_email_html(reset_link: str) -> str:
@@ -28,29 +33,30 @@ def _build_reset_email_html(reset_link: str) -> str:
     """
 
 
+def _send_sync(to_email: str, subject: str, html: str) -> None:
+    _client.transactional_emails.send_transac_email(
+        html_content=html,
+        subject=subject,
+        sender=SendTransacEmailRequestSender(
+            email=settings.email_from,
+            name="TaskFlow AI",
+        ),
+        to=[SendTransacEmailRequestToItem(email=to_email)],
+    )
+
+
 async def send_password_reset_email(to_email: str, reset_token: str) -> None:
     reset_link = f"{settings.frontend_url}/reset-password?token={reset_token}"
 
-    message = EmailMessage()
-    message["From"] = settings.email_from
-    message["To"] = to_email
-    message["Subject"] = "Reset your TaskFlow AI password"
-    message.set_content("Please view this email in an HTML-compatible client.")
-    message.add_alternative(_build_reset_email_html(reset_link), subtype="html")
-
     try:
         await asyncio.wait_for(
-            aiosmtplib.send(
-                message,
-                hostname=settings.smtp_host,
-                port=settings.smtp_port,
-                username=settings.smtp_username,
-                password=settings.smtp_password,
-                start_tls=True,
+            asyncio.to_thread(
+                _send_sync,
+                to_email,
+                "Reset your TaskFlow AI password",
+                _build_reset_email_html(reset_link),
             ),
             timeout=15,
         )
-    except asyncio.TimeoutError:
-        logger.error("Timed out sending password reset email to %s", to_email)
     except Exception:
         logger.exception("Failed to send password reset email to %s", to_email)

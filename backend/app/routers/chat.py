@@ -14,5 +14,5 @@ async def chat(
     current_user: UserPublic = Depends(get_current_user),
 ):
     tasks = await task_service.list_tasks(current_user.id)
-    reply = await ai_service.answer_question(payload.message, tasks)
+    reply = await ai_service.answer_question(payload.message, tasks, current_user.name)
     return ChatResponse(reply=reply)

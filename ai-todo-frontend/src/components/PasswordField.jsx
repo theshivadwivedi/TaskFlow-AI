@@ -1,5 +1,5 @@
 import { forwardRef, useState } from "react";
-import { Eye, EyeOff, Lock } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 
 const PasswordField = forwardRef(function PasswordField(
   { label, placeholder, error, ...rest },
@@ -9,48 +9,46 @@ const PasswordField = forwardRef(function PasswordField(
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-gray-700">
+      <label
+        className="block text-sm font-medium text-[#7A7266]"
+        style={{ fontFamily: "'Satoshi', sans-serif" }}
+      >
         {label}
       </label>
 
       <div className="relative">
-        <Lock
-          size={18}
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-        />
-
         <input
           ref={ref}
           type={showPassword ? "text" : "password"}
           placeholder={placeholder}
           className={`
             w-full
-            rounded-xl
+            rounded-lg
             border
-            ${error ? "border-red-400" : "border-gray-300"}
+            ${error ? "border-red-400" : "border-[#E4DCC8]"}
             bg-white
-            pl-12
-            pr-14
-            py-4
+            text-[#2B2118]
+            placeholder:text-[#B8B0A0]
+            pl-4
+            pr-11
+            py-3
             outline-none
-            transition-all
-            duration-300
-            focus:border-indigo-500
-            focus:ring-4
-            focus:ring-indigo-100
+            transition-colors
+            duration-200
+            focus:border-[#5C3A21]
           `}
+          style={{ fontFamily: "'Satoshi', sans-serif" }}
           {...rest}
         />
-
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-[#A6A29C] hover:text-[#5C3A21] transition-colors"
         >
-          {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
         </button>
       </div>
-      {error && <p className="text-sm text-red-500">{error}</p>}
+      {error && <p className="text-sm text-red-600">{error}</p>}
     </div>
   );
 });

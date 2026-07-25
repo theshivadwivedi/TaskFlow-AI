@@ -97,7 +97,7 @@ function Dashboard() {
           <h2 className="text-6xl font-bold text-gray-900">My Tasks</h2>
           <button
             onClick={openCreateModal}
-            className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white px-5 py-3 rounded-xl font-semibold shadow-lg hover:scale-[1.02] transition"
+            className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white px-5 py-3 rounded-xl font-semibold  hover:scale-[1.02] transition"
           >
             <Plus size={18} />
             New Task
@@ -105,7 +105,7 @@ function Dashboard() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-2xl p-4  border border-gray-100">
             <div className="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center mb-3">
               <ListTodo size={18} className="text-indigo-600" />
             </div>
@@ -113,7 +113,7 @@ function Dashboard() {
             <p className="text-xs text-gray-400">Total Tasks</p>
           </div>
 
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-2xl p-4  border border-gray-100">
             <div className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center mb-3">
               <Clock size={18} className="text-gray-500" />
             </div>
@@ -121,7 +121,7 @@ function Dashboard() {
             <p className="text-xs text-gray-400">Pending</p>
           </div>
 
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-2xl p-4  border border-gray-100">
             <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center mb-3">
               <Loader2 size={18} className="text-blue-600" />
             </div>
@@ -129,7 +129,7 @@ function Dashboard() {
             <p className="text-xs text-gray-400">In Progress</p>
           </div>
 
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-2xl p-4  border-gray-100">
             <div className="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center mb-3">
               <CheckCircle2 size={18} className="text-emerald-600" />
             </div>

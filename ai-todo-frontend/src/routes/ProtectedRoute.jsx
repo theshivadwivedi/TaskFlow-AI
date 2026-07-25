@@ -6,8 +6,9 @@ function ProtectedRoute({ children }) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-400">
-        Loading...
+      <div className="min-h-screen bg-[#0A0E17] flex flex-col items-center justify-center gap-4">
+        <div className="w-10 h-10 rounded-full border-2 border-white/10 border-t-teal-400 animate-spin" />
+        <p className="text-slate-500 text-sm">Loading...</p>
       </div>
     );
   }

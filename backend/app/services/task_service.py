@@ -95,9 +95,11 @@ async def update_task(user_id: str, task_id: str, payload: TaskUpdate) -> TaskPu
 
     update_fields["updated_at"] = datetime.now(timezone.utc)
 
+
     result = await tasks_collection.find_one_and_update(
         {"_id": object_id, "user_id": user_id},
         {"$set": update_fields},
+        
         return_document=ReturnDocument.AFTER,
     )
     if not result:

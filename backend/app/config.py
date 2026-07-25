@@ -15,6 +15,7 @@ class Settings(BaseSettings):
 
     # AI
     gemini_api_key: str = ""
+    groq_api_key: str = ""
 
 
 

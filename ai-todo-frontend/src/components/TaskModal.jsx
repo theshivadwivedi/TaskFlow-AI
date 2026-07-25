@@ -14,9 +14,9 @@ const taskSchema = z.object({
 });
 
 const inputClass =
-  "w-full rounded-xl border border-white/10 bg-white/[0.04] text-white placeholder:text-white/30 px-4 py-3 outline-none transition focus:border-indigo-400/60 focus:ring-4 focus:ring-indigo-500/10";
+  "w-full rounded-lg border border-[#E4DCC8] bg-[#F7F3EC] text-[#2B2118] placeholder:text-[#B8B0A0] px-4 py-3 outline-none transition focus:outline-none focus:ring-0 focus:border-[#5C3A21]";
 
-const labelClass = "block text-sm font-medium text-white/50 mb-2";
+const labelClass = "block text-sm font-medium text-[#7A7266] mb-2";
 
 function TaskModal({ initialData, onClose, onSubmit }) {
   const isEditMode = !!initialData;
@@ -48,14 +48,20 @@ function TaskModal({ initialData, onClose, onSubmit }) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
-      <div className="bg-[#12151F] rounded-3xl border border-white/10 w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+    <div
+      className="fixed inset-0 bg-black/30 flex items-center justify-center p-4 z-50"
+      style={{ fontFamily: "'Satoshi', sans-serif" }}
+    >
+      <div className="bg-white rounded-2xl border border-[#E4DCC8] w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-white">
+          <h2 className="text-xl font-bold text-[#2B2118]">
             {isEditMode ? "Edit Task" : "Create Task"}
           </h2>
-          <button onClick={onClose} className="text-white/30 hover:text-white/70 transition-colors">
-            <X size={22} />
+          <button
+            onClick={onClose}
+            className="text-[#A6A29C] hover:text-[#5C3A21] transition-colors outline-none focus:outline-none"
+          >
+            <X size={20} />
           </button>
         </div>
 
@@ -63,19 +69,12 @@ function TaskModal({ initialData, onClose, onSubmit }) {
           <div>
             <label className={labelClass}>Title</label>
             <input className={inputClass} placeholder="e.g. Fix login bug" {...register("title")} />
-            {errors.title && (
-              <p className="text-sm text-red-400 mt-1">{errors.title.message}</p>
-            )}
+            {errors.title && <p className="text-sm text-red-600 mt-1">{errors.title.message}</p>}
           </div>
 
           <div>
             <label className={labelClass}>Description</label>
-            <textarea
-              className={inputClass}
-              rows={3}
-              placeholder="Optional details"
-              {...register("description")}
-            />
+            <textarea className={inputClass} rows={3} placeholder="Optional details" {...register("description")} />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -85,30 +84,25 @@ function TaskModal({ initialData, onClose, onSubmit }) {
             </div>
             <div>
               <label className={labelClass}>Due Date</label>
-              <input
-                type="date"
-                className={inputClass}
-                style={{ colorScheme: "dark" }}
-                {...register("due_date")}
-              />
+              <input type="date" className={inputClass} {...register("due_date")} />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className={labelClass}>Priority</label>
-              <select className={inputClass} style={{ colorScheme: "dark" }} {...register("priority")}>
-                <option value="low"style={{ backgroundColor: "#12151F", color: "#ffffff" }}>Low</option>
-                <option value="medium"style={{ backgroundColor: "#12151F", color: "#ffffff" }}>Medium</option>
-                <option value="high"style={{ backgroundColor: "#12151F", color: "#ffffff" }}>High</option>
+              <select className={inputClass} {...register("priority")}>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
               </select>
             </div>
             <div>
               <label className={labelClass}>Status</label>
-              <select className={inputClass} style={{ colorScheme: "dark" }} {...register("status")}>
-                <option value="pending" style={{ backgroundColor: "#12151F", color: "#ffffff" }}>Pending</option>
-                <option value="in_progress" style={{ backgroundColor: "#12151F", color: "#ffffff" }}>In Progress</option>
-                <option value="completed" style={{ backgroundColor: "#12151F", color: "#ffffff" }}>Completed</option>
+              <select className={inputClass} {...register("status")}>
+                <option value="pending">Pending</option>
+                <option value="in_progress">In Progress</option>
+                <option value="completed">Completed</option>
               </select>
             </div>
           </div>

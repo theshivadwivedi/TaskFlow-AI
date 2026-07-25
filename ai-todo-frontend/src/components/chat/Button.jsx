@@ -6,23 +6,18 @@ function Button({ children, type = "button", onClick, disabled = false }) {
       disabled={disabled}
       className="
         w-full
-        rounded-xl
-        bg-gradient-to-r
-        from-indigo-500
-        to-violet-500
-        py-4
+        rounded-lg
+        bg-[#5C3A21]
+        py-3.5
         font-semibold
         text-white
-        shadow-[0_0_24px_rgba(99,102,241,0.35)]
-        transition-all
-        duration-300
-        hover:shadow-[0_0_36px_rgba(99,102,241,0.55)]
-        hover:scale-[1.02]
+        transition-colors
+        duration-200
+        hover:bg-[#4A2E19]
         disabled:opacity-50
         disabled:cursor-not-allowed
-        disabled:hover:scale-100
-        disabled:shadow-none
       "
+      style={{ fontFamily: "'Satoshi', sans-serif" }}
     >
       {children}
     </button>

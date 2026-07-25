@@ -37,6 +37,7 @@ class TaskUpdate(BaseModel):
     due_date: Optional[datetime] = None
     priority: Optional[TaskPriority] = None
     status: Optional[TaskStatus] = None
+    
 
 
 class TaskPublic(BaseModel):
