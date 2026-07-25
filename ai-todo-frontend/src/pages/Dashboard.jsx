@@ -250,8 +250,6 @@ function Dashboard() {
         </button>
       </div>
 
-  
-
         <div className="flex-1 min-w-0 pt-20 lg:pt-0">
           {/* top header */}
           <div className="bg-white border-b border-[#E4DCC8] px-8 py-5 flex items-center justify-between gap-4">
@@ -345,33 +343,26 @@ function Dashboard() {
               </div>
             </div>
 
-              {/* filters */}
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm mb-4">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[#A6A29C] mr-1">Priority</span>
-                  {PRIORITY_FILTERS.map((f) => (
-                    ...
-                  ))}
-                </div>
-              
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[#A6A29C] mr-1">Status</span>
-                  {STATUS_FILTERS.map((f) => (
-                    ...
-                  ))}
-                </div>
-              
-                {hasActiveFilters && (
+            {/* filters */}
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm mb-4">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-[#A6A29C] mr-1">Priority</span>
+                {PRIORITY_FILTERS.map((f) => (
                   <button
-                    onClick={clearFilters}
-                    className="text-red-700/70 hover:text-red-700 ml-auto"
+                    key={f.value}
+                    onClick={() => setPriorityFilter(f.value)}
+                    className={`px-3 py-1 rounded-full transition-colors duration-150 ${
+                      priorityFilter === f.value
+                        ? "bg-[#5C3A21] text-white"
+                        : "bg-white border border-[#E4DCC8] text-[#7A7266] hover:border-[#5C3A21]/40"
+                    }`}
                   >
-                    Clear filters
+                    {f.label}
                   </button>
-                )}
+                ))}
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-[#A6A29C] mr-1">Status</span>
                 {STATUS_FILTERS.map((f) => (
                   <button
@@ -442,7 +433,6 @@ function Dashboard() {
             )}
           </div>
         </div>
-
 
       {isModalOpen && (
         <TaskModal
