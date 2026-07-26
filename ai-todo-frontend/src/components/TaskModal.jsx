@@ -102,6 +102,7 @@ function TaskModal({ initialData, onClose, onSubmit }) {
                 <p className="text-sm text-red-500 mt-1">{errors.due_date.message}</p>
               )}
             </div>
+          </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
