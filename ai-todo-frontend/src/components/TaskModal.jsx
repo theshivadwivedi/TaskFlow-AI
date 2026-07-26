@@ -96,10 +96,12 @@ function TaskModal({ initialData, onClose, onSubmit }) {
               <input className={inputClass} placeholder="e.g. Web Dev" {...register("category")} />
             </div>
             <div>
-              <label className={labelClass}>Due Date</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Due Date</label>
               <input type="date" className={inputClass} {...register("due_date")} />
+              {errors.due_date && (
+                <p className="text-sm text-red-500 mt-1">{errors.due_date.message}</p>
+              )}
             </div>
-          </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
