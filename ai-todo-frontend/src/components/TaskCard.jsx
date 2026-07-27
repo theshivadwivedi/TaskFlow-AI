@@ -26,13 +26,8 @@ function TaskCard({ task, onEdit, onDelete, onStatusChange }) {
   }
 
   return (
-<<<<<<< HEAD
     <div className="group bg-white hover:bg-[#FBF8F2] px-4 sm:px-5 py-4 transition-colors duration-150">
       <div className="flex items-start gap-3">
-=======
-    <div className="group bg-white hover:bg-[#FBF8F2] px-5 py-4 flex flex-col sm:flex-row sm:items-start gap-3 transition-colors duration-150">
-      <div className="flex items-start gap-3 flex-1 min-w-0">
->>>>>>> c346e08b67fe3868abcd7e94cb3fe9f9d23aed83
         <button
           onClick={toggleDone}
           className="mt-0.5 shrink-0 text-[#D4CBB6] hover:text-[#5C3A21] transition-colors"
@@ -49,11 +44,7 @@ function TaskCard({ task, onEdit, onDelete, onStatusChange }) {
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-baseline gap-x-2">
             <h3
-<<<<<<< HEAD
               className={`font-medium text-[#2B2118] text-[15px] break-words ${
-=======
-              className={`font-medium text-[#2B2118] text-[15px] ${
->>>>>>> c346e08b67fe3868abcd7e94cb3fe9f9d23aed83
                 isDone ? "line-through text-[#A6A29C]" : ""
               }`}
             >
@@ -67,9 +58,8 @@ function TaskCard({ task, onEdit, onDelete, onStatusChange }) {
           {task.description && (
             <p className="text-sm text-[#A6A29C] mt-0.5 line-clamp-1">{task.description}</p>
           )}
-<<<<<<< HEAD
 
-          {/* meta row — always below title, one consistent layout at every screen size */}
+          {/* meta row — always below title */}
           <div className="flex items-center flex-wrap gap-3 mt-2.5">
             {task.due_date && (
               <span className="flex items-center gap-1 text-[#A6A29C] text-xs whitespace-nowrap">
@@ -108,48 +98,6 @@ function TaskCard({ task, onEdit, onDelete, onStatusChange }) {
               </button>
             </div>
           </div>
-=======
-        </div>
-      </div>
-
-      {/* meta row: own line on mobile, inline on the right from sm+ up */}
-      <div className="flex items-center justify-between sm:justify-end gap-3 flex-wrap pl-8 sm:pl-0 sm:shrink-0 sm:ml-2">
-        {task.due_date && (
-          <span className="flex items-center gap-1 text-[#A6A29C] text-xs whitespace-nowrap">
-            <Calendar size={12} />
-            {new Date(task.due_date).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
-          </span>
-        )}
-
-        <div className="relative shrink-0">
-          <select
-            value={task.status}
-            onChange={(e) => onStatusChange(task.id, e.target.value)}
-            className={`appearance-none bg-transparent text-xs font-medium pr-4 outline-none cursor-pointer ${statusColor[task.status]}`}
-          >
-            <option value="pending">{statusLabels.pending}</option>
-            <option value="in_progress">{statusLabels.in_progress}</option>
-            <option value="completed">{statusLabels.completed}</option>
-          </select>
-          <ChevronDown size={11} className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none opacity-50" />
-        </div>
-
-        <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity shrink-0">
-          <button
-            onClick={() => onEdit(task)}
-            className="w-7 h-7 rounded-md flex items-center justify-center text-[#A6A29C] hover:text-[#5C3A21] hover:bg-[#F0EADA] transition-colors"
-            aria-label="Edit task"
-          >
-            <Pencil size={13} />
-          </button>
-          <button
-            onClick={() => onDelete(task.id)}
-            className="w-7 h-7 rounded-md flex items-center justify-center text-[#A6A29C] hover:text-red-700 hover:bg-red-50 transition-colors"
-            aria-label="Delete task"
-          >
-            <Trash2 size={13} />
-          </button>
->>>>>>> c346e08b67fe3868abcd7e94cb3fe9f9d23aed83
         </div>
       </div>
     </div>
