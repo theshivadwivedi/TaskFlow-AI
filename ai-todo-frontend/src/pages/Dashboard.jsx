@@ -215,7 +215,7 @@ function Dashboard() {
         (a, b) =>
           new Date(b.created_at || b.due_date || 0) - new Date(a.created_at || a.due_date || 0)
       )
-      .slice(0, 6);
+      .slice(0, 4);
   }, [tasks]);
 
   return (
