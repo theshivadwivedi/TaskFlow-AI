@@ -49,7 +49,6 @@ function dueDateLabel(dueDateStr) {
 
 function Dashboard() {
   const { user, logout } = useAuth();
-  const navigate = useNavigateFallback();
 
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -175,7 +174,6 @@ function Dashboard() {
     refreshStats();
   }, []);
 
-  // Category progress — derived from real task data, no fabrication
   const categoryProgress = useMemo(() => {
     const groups = {};
     allTasks.forEach((t) => {
@@ -195,7 +193,6 @@ function Dashboard() {
       .slice(0, 3);
   }, [allTasks]);
 
-  // Tasks due this week — real due_date counts, not a fabricated "completed" trend
   const dueThisWeek = useMemo(() => {
     const today = startOfDay(new Date());
     const buckets = Array.from({ length: 7 }, (_, i) => {
@@ -214,7 +211,6 @@ function Dashboard() {
 
   const maxDueCount = Math.max(1, ...dueThisWeek.map((b) => b.count));
 
-  // Upcoming tasks grouped by due date, for the right rail
   const upcomingGrouped = useMemo(() => {
     const withDates = allTasks
       .filter((t) => t.due_date && t.status !== "completed")
@@ -235,7 +231,7 @@ function Dashboard() {
 
   return (
     <div
-      className="min-h-screen flex bg-[#F7F3EC]"
+      className="h-screen overflow-hidden flex bg-[#F7F3EC]"
       style={{ fontFamily: "'Satoshi', sans-serif" }}
     >
       <Sidebar upcomingGrouped={upcomingGrouped} onTaskClick={openEditModal} />
@@ -250,189 +246,190 @@ function Dashboard() {
         </button>
       </div>
 
-        <div className="flex-1 min-w-0 pt-20 lg:pt-0">
-          {/* top header */}
-          <div className="bg-white border-b border-[#E4DCC8] px-8 py-5 flex items-center justify-between gap-4">
-            <div className="relative flex-1 max-w-sm">
-              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#A6A29C]" />
-              <input
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Search tasks..."
-                className="w-full bg-[#F7F3EC] border border-[#E4DCC8] rounded-lg text-[#2B2118] placeholder:text-[#A6A29C] pl-11 pr-8 py-2.5 text-sm outline-none focus:border-[#5C3A21]/50 transition-colors"
-              />
-              {searchInput && (
-                <button
-                  onClick={() => setSearchInput("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#A6A29C] hover:text-[#5C3A21]"
-                  aria-label="Clear search"
-                >
-                  <X size={14} />
-                </button>
-              )}
-            </div>
-            <button
-              onClick={openCreateModal}
-              className="flex items-center gap-2 bg-[#5C3A21] text-white px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#4A2E19] transition-colors duration-200 shrink-0"
-            >
-              <Plus size={16} strokeWidth={2.5} />
-              New Task
-            </button>
+      {/* main content — fixed height, internal scroll only on the task list */}
+      <div className="flex-1 min-w-0 pt-20 lg:pt-0 h-full flex flex-col overflow-hidden">
+        {/* top header — stays fixed */}
+        <div className="bg-white border-b border-[#E4DCC8] px-8 py-5 flex items-center justify-between gap-4 shrink-0">
+          <div className="relative flex-1 max-w-sm">
+            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#A6A29C]" />
+            <input
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder="Search tasks..."
+              className="w-full bg-[#F7F3EC] border border-[#E4DCC8] rounded-lg text-[#2B2118] placeholder:text-[#A6A29C] pl-11 pr-8 py-2.5 text-sm outline-none focus:border-[#5C3A21]/50 transition-colors"
+            />
+            {searchInput && (
+              <button
+                onClick={() => setSearchInput("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#A6A29C] hover:text-[#5C3A21]"
+                aria-label="Clear search"
+              >
+                <X size={14} />
+              </button>
+            )}
+          </div>
+          <button
+            onClick={openCreateModal}
+            className="flex items-center gap-2 bg-[#5C3A21] text-white px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#4A2E19] transition-colors duration-200 shrink-0"
+          >
+            <Plus size={16} strokeWidth={2.5} />
+            New Task
+          </button>
+        </div>
+
+        {/* fixed section — greeting, stats, category cards, chart, filters */}
+        <div className="px-8 pt-8 pb-4 shrink-0">
+          <p className="text-xs uppercase tracking-[0.15em] text-[#A6A29C] font-medium mb-1">
+            {getGreeting()}{user?.name ? `, ${user.name.split(" ")[0]}` : ""}
+          </p>
+          <h2 className="text-[26px] font-bold text-[#2B2118] tracking-tight mb-6">
+            {stats.pending + stats.in_progress > 0
+              ? `${stats.pending + stats.in_progress} task${
+                  stats.pending + stats.in_progress === 1 ? "" : "s"
+                } on your plate`
+              : "You're all caught up"}
+          </h2>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+            <StatTile value={stats.total} label="Total" />
+            <StatTile value={stats.pending} label="Pending" accent="text-[#B8863B]" />
+            <StatTile value={stats.in_progress} label="In progress" accent="text-[#5C6B5C]" />
+            <StatTile value={stats.completed} label="Completed" accent="text-[#3F6B4E]" />
           </div>
 
-          <div className="px-8 py-8">
-            <p className="text-xs uppercase tracking-[0.15em] text-[#A6A29C] font-medium mb-1">
-              {getGreeting()}{user?.name ? `, ${user.name.split(" ")[0]}` : ""}
-            </p>
-            <h2 className="text-[26px] font-bold text-[#2B2118] tracking-tight mb-6">
-              {stats.pending + stats.in_progress > 0
-                ? `${stats.pending + stats.in_progress} task${
-                    stats.pending + stats.in_progress === 1 ? "" : "s"
-                  } on your plate`
-                : "You're all caught up"}
-            </h2>
-
-            {/* overview stats */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-              <StatTile value={stats.total} label="Total" />
-              <StatTile value={stats.pending} label="Pending" accent="text-[#B8863B]" />
-              <StatTile value={stats.in_progress} label="In progress" accent="text-[#5C6B5C]" />
-              <StatTile value={stats.completed} label="Completed" accent="text-[#3F6B4E]" />
-            </div>
-
-            {/* category progress cards */}
-            {categoryProgress.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-sm font-semibold text-[#2B2118] mb-3">By category</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  {categoryProgress.map((c) => (
-                    <div key={c.name} className="bg-white border border-[#E4DCC8] rounded-xl p-4">
-                      <p className="text-sm font-medium text-[#2B2118] mb-2 truncate">{c.name}</p>
-                      <div className="flex items-center justify-between text-xs text-[#A6A29C] mb-2">
-                        <span>{c.pct}%</span>
-                        <span>{c.completed}/{c.total} tasks</span>
-                      </div>
-                      <div className="h-1.5 rounded-full bg-[#E4DCC8] overflow-hidden">
-                        <div
-                          className="h-full bg-[#5C3A21] rounded-full"
-                          style={{ width: `${c.pct}%` }}
-                        />
-                      </div>
+          {categoryProgress.length > 0 && (
+            <div className="mb-8">
+              <h3 className="text-sm font-semibold text-[#2B2118] mb-3">By category</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {categoryProgress.map((c) => (
+                  <div key={c.name} className="bg-white border border-[#E4DCC8] rounded-xl p-4">
+                    <p className="text-sm font-medium text-[#2B2118] mb-2 truncate">{c.name}</p>
+                    <div className="flex items-center justify-between text-xs text-[#A6A29C] mb-2">
+                      <span>{c.pct}%</span>
+                      <span>{c.completed}/{c.total} tasks</span>
                     </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* tasks due this week — real due_date counts */}
-            <div className="mb-8 bg-white border border-[#E4DCC8] rounded-xl p-5">
-              <h3 className="text-sm font-semibold text-[#2B2118] mb-4">Tasks due this week</h3>
-              <div className="flex items-end justify-between gap-2 h-28">
-                {dueThisWeek.map((b) => (
-                  <div key={b.label + b.date} className="flex-1 flex flex-col items-center gap-2">
-                    <div className="w-full flex items-end justify-center h-20">
+                    <div className="h-1.5 rounded-full bg-[#E4DCC8] overflow-hidden">
                       <div
-                        className="w-full max-w-[28px] rounded-t bg-[#5C3A21]/80"
-                        style={{ height: `${(b.count / maxDueCount) * 100}%`, minHeight: b.count ? "4px" : "0px" }}
-                        title={`${b.count} task${b.count === 1 ? "" : "s"}`}
+                        className="h-full bg-[#5C3A21] rounded-full"
+                        style={{ width: `${c.pct}%` }}
                       />
                     </div>
-                    <span className="text-[11px] text-[#A6A29C]">{b.label}</span>
                   </div>
                 ))}
               </div>
             </div>
+          )}
 
-            {/* filters */}
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm mb-4">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-[#A6A29C] mr-1">Priority</span>
-                {PRIORITY_FILTERS.map((f) => (
-                  <button
-                    key={f.value}
-                    onClick={() => setPriorityFilter(f.value)}
-                    className={`px-3 py-1 rounded-full transition-colors duration-150 ${
-                      priorityFilter === f.value
-                        ? "bg-[#5C3A21] text-white"
-                        : "bg-white border border-[#E4DCC8] text-[#7A7266] hover:border-[#5C3A21]/40"
-                    }`}
-                  >
-                    {f.label}
-                  </button>
-                ))}
-              </div>
+          <div className="mb-8 bg-white border border-[#E4DCC8] rounded-xl p-5">
+            <h3 className="text-sm font-semibold text-[#2B2118] mb-4">Tasks due this week</h3>
+            <div className="flex items-end justify-between gap-2 h-28">
+              {dueThisWeek.map((b) => (
+                <div key={b.label + b.date} className="flex-1 flex flex-col items-center gap-2">
+                  <div className="w-full flex items-end justify-center h-20">
+                    <div
+                      className="w-full max-w-[28px] rounded-t bg-[#5C3A21]/80"
+                      style={{ height: `${(b.count / maxDueCount) * 100}%`, minHeight: b.count ? "4px" : "0px" }}
+                      title={`${b.count} task${b.count === 1 ? "" : "s"}`}
+                    />
+                  </div>
+                  <span className="text-[11px] text-[#A6A29C]">{b.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
 
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-[#A6A29C] mr-1">Status</span>
-                {STATUS_FILTERS.map((f) => (
-                  <button
-                    key={f.value}
-                    onClick={() => setStatusFilter(f.value)}
-                    className={`px-3 py-1 rounded-full transition-colors duration-150 ${
-                      statusFilter === f.value
-                        ? "bg-[#5C3A21] text-white"
-                        : "bg-white border border-[#E4DCC8] text-[#7A7266] hover:border-[#5C3A21]/40"
-                    }`}
-                  >
-                    {f.label}
-                  </button>
-                ))}
-              </div>
-
-              {hasActiveFilters && (
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+            <div className="flex items-center gap-2">
+              <span className="text-[#A6A29C] mr-1">Priority</span>
+              {PRIORITY_FILTERS.map((f) => (
                 <button
-                  onClick={clearFilters}
-                  className="text-red-700/70 hover:text-red-700 ml-auto"
+                  key={f.value}
+                  onClick={() => setPriorityFilter(f.value)}
+                  className={`px-3 py-1 rounded-full transition-colors duration-150 ${
+                    priorityFilter === f.value
+                      ? "bg-[#5C3A21] text-white"
+                      : "bg-white border border-[#E4DCC8] text-[#7A7266] hover:border-[#5C3A21]/40"
+                  }`}
                 >
-                  Clear filters
+                  {f.label}
                 </button>
-              )}
+              ))}
             </div>
 
-            {error && (
-              <div className="mb-5 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
-                {error}
-              </div>
-            )}
+            <div className="flex items-center gap-2">
+              <span className="text-[#A6A29C] mr-1">Status</span>
+              {STATUS_FILTERS.map((f) => (
+                <button
+                  key={f.value}
+                  onClick={() => setStatusFilter(f.value)}
+                  className={`px-3 py-1 rounded-full transition-colors duration-150 ${
+                    statusFilter === f.value
+                      ? "bg-[#5C3A21] text-white"
+                      : "bg-white border border-[#E4DCC8] text-[#7A7266] hover:border-[#5C3A21]/40"
+                  }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
 
-            {isLoading && (
-              <div className="text-center text-[#A6A29C] py-20 text-sm">Loading your tasks...</div>
-            )}
-
-            {!isLoading && tasks.length === 0 && (
-              <div className="text-center py-20">
-                <p className="text-[#A6A29C] mb-4 text-sm">
-                  {hasActiveFilters
-                    ? "No tasks match your filters."
-                    : "No tasks yet — create your first one."}
-                </p>
-                {hasActiveFilters ? (
-                  <button onClick={clearFilters} className="text-[#5C3A21] text-sm font-semibold hover:underline">
-                    Clear filters
-                  </button>
-                ) : (
-                  <button onClick={openCreateModal} className="text-[#5C3A21] text-sm font-semibold hover:underline">
-                    + Add a task
-                  </button>
-                )}
-              </div>
-            )}
-
-            {!isLoading && tasks.length > 0 && (
-              <div className="border border-[#E4DCC8] rounded-xl overflow-hidden divide-y divide-[#E4DCC8] bg-white">
-                {tasks.map((task) => (
-                  <TaskCard
-                    key={task.id}
-                    task={task}
-                    onEdit={openEditModal}
-                    onDelete={handleDelete}
-                    onStatusChange={handleStatusChange}
-                  />
-                ))}
-              </div>
+            {hasActiveFilters && (
+              <button
+                onClick={clearFilters}
+                className="text-red-700/70 hover:text-red-700 ml-auto"
+              >
+                Clear filters
+              </button>
             )}
           </div>
         </div>
+
+        {/* scrolling section — only the task list scrolls */}
+        <div className="flex-1 overflow-y-auto px-8 pb-8">
+          {error && (
+            <div className="mb-5 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+              {error}
+            </div>
+          )}
+
+          {isLoading && (
+            <div className="text-center text-[#A6A29C] py-20 text-sm">Loading your tasks...</div>
+          )}
+
+          {!isLoading && tasks.length === 0 && (
+            <div className="text-center py-20">
+              <p className="text-[#A6A29C] mb-4 text-sm">
+                {hasActiveFilters
+                  ? "No tasks match your filters."
+                  : "No tasks yet — create your first one."}
+              </p>
+              {hasActiveFilters ? (
+                <button onClick={clearFilters} className="text-[#5C3A21] text-sm font-semibold hover:underline">
+                  Clear filters
+                </button>
+              ) : (
+                <button onClick={openCreateModal} className="text-[#5C3A21] text-sm font-semibold hover:underline">
+                  + Add a task
+                </button>
+              )}
+            </div>
+          )}
+
+          {!isLoading && tasks.length > 0 && (
+            <div className="border border-[#E4DCC8] rounded-xl overflow-hidden divide-y divide-[#E4DCC8] bg-white">
+              {tasks.map((task) => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  onEdit={openEditModal}
+                  onDelete={handleDelete}
+                  onStatusChange={handleStatusChange}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
 
       {isModalOpen && (
         <TaskModal
@@ -445,11 +442,6 @@ function Dashboard() {
       <ChatWidget />
     </div>
   );
-}
-
-function useNavigateFallback() {
-  // kept for parity with sidebar's own useNavigate; Dashboard itself doesn't navigate
-  return null;
 }
 
 function StatTile({ value, label, accent = "text-[#2B2118]" }) {
