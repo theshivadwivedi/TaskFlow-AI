@@ -247,7 +247,7 @@ function Dashboard() {
       </div>
 
     
-      <div className="flex-1 min-w-0 pt-20 lg:pt-0">
+      <div className="flex-1 min-w-0 pt-20 lg:pt-0 lg:ml-64">
  
         <div className="bg-white border-b border-[#E4DCC8] px-8 py-5 flex items-center justify-between gap-4 shrink-0">
           <div className="relative flex-1 max-w-sm">
