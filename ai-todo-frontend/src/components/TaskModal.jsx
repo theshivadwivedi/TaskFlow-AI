@@ -52,7 +52,7 @@ function TaskModal({ initialData, onClose, onSubmit }) {
       className="fixed inset-0 bg-black/30 flex items-center justify-center p-4 z-50"
       style={{ fontFamily: "'Satoshi', sans-serif" }}
     >
-      <div className="bg-white rounded-2xl border border-[#E4DCC8] w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-2xl border border-[#E4DCC8] w-full max-w-lg p-5 sm:p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-[#2B2118]">
             {isEditMode ? "Edit Task" : "Create Task"}
@@ -77,7 +77,7 @@ function TaskModal({ initialData, onClose, onSubmit }) {
             <textarea className={inputClass} rows={3} placeholder="Optional details" {...register("description")} />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className={labelClass}>Category</label>
               <input className={inputClass} placeholder="e.g. Web Dev" {...register("category")} />
@@ -88,7 +88,7 @@ function TaskModal({ initialData, onClose, onSubmit }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className={labelClass}>Priority</label>
               <select className={inputClass} {...register("priority")}>

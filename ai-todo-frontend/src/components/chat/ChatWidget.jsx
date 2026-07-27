@@ -51,7 +51,7 @@ function ChatWidget() {
     <div style={{ fontFamily: "'Satoshi', sans-serif" }}>
       <motion.button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-5 py-3.5 rounded-lg bg-[#5C3A21] text-white font-medium text-sm border border-[#4A2E19] hover:bg-[#4A2E19] transition-colors duration-200"
+        className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-40 flex items-center gap-2 px-4 sm:px-5 py-3 sm:py-3.5 rounded-lg bg-[#5C3A21] text-white font-medium text-sm border border-[#4A2E19] hover:bg-[#4A2E19] transition-colors duration-200"
         animate={{ opacity: isOpen ? 0 : 1, pointerEvents: isOpen ? "none" : "auto" }}
         aria-label="Open AI assistant"
       >
