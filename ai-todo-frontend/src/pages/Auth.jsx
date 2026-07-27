@@ -14,20 +14,11 @@ const schemas = {
     email: z.string().email("Enter a valid email address"),
     password: z.string().min(1, "Password is required"),
   }),
-signup: z.object({
-  name: z
-    .string()
-    .trim()
-    .min(3, "Name must be at least 3 characters"),
-  email: z.string().email("Enter a valid email address"),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .refine(
-      (val) => val.trim().length >= 8,
-      "Password can't be just spaces"
-    ),
-}),
+  signup: z.object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Enter a valid email address"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+  }),
   forgot: z.object({
     email: z.string().email("Enter a valid email address"),
   }),
@@ -44,6 +35,7 @@ function Auth({ mode = "login" }) {
   const { login, signup } = useAuth();
   const [serverError, setServerError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [remember, setRemember] = useState(false); // NEW
 
   const {
     register,
@@ -64,11 +56,11 @@ function Auth({ mode = "login" }) {
 
     try {
       if (mode === "login") {
-        await login(formData);
+        await login(formData, { remember });
         navigate("/dashboard");
       }
       if (mode === "signup") {
-        await signup(formData);
+        await signup(formData, { remember });
         navigate("/dashboard");
       }
       if (mode === "forgot") {
@@ -89,7 +81,6 @@ function Auth({ mode = "login" }) {
     >
       {/* LEFT — illustration panel */}
       <div className="hidden lg:flex w-[45%] bg-[#EFE7D6] relative items-center justify-center overflow-hidden">
-        {/* dotted field */}
         <div
           className="absolute inset-0 opacity-50"
           style={{
@@ -97,16 +88,9 @@ function Auth({ mode = "login" }) {
             backgroundSize: "22px 22px",
           }}
         />
-
         <div className="relative z-10 flex flex-col items-center px-12 text-center">
-          {/* line-art path */}
           <svg width="220" height="140" viewBox="0 0 220 140" fill="none" className="mb-8">
-            <path
-              d="M20 90 L75 40 L125 70 L175 20"
-              stroke="#5C3A21"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
+            <path d="M20 90 L75 40 L125 70 L175 20" stroke="#5C3A21" strokeWidth="1.5" strokeLinecap="round" />
             <circle cx="20" cy="90" r="4" fill="#5C3A21" />
             <circle cx="75" cy="40" r="4" fill="#5C3A21" />
             <circle cx="125" cy="70" r="4" fill="#5C3A21" />
@@ -119,8 +103,7 @@ function Auth({ mode = "login" }) {
 
           <h2 className="text-2xl font-bold text-[#2B2118] mb-3">TaskFlow AI</h2>
           <p className="text-[#7A7266] text-sm max-w-xs leading-relaxed">
-            Sign in to organize your tasks and let AI help you focus on what
-            matters most.
+            Sign in to organize your tasks and let AI help you focus on what matters most.
           </p>
         </div>
       </div>
@@ -170,6 +153,19 @@ function Auth({ mode = "login" }) {
                 error={errors.password?.message}
                 {...register("password")}
               />
+            )}
+
+            {/* Remember me (only for login/signup) */}
+            {mode !== "forgot" && (
+              <label className="flex items-center gap-2 text-sm text-[#7A7266]">
+                <input
+                  type="checkbox"
+                  checked={remember}
+                  onChange={(e) => setRemember(e.target.checked)}
+                  className="w-4 h-4 rounded border-[#E4DCC8] text-[#5C3A21] accent-[#5C3A21]"
+                />
+                Remember me on this device
+              </label>
             )}
 
             <button
