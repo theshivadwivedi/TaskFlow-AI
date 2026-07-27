@@ -13,7 +13,7 @@ function Sidebar({ upcomingGrouped = [], onTaskClick }) {
 
   return (
     <aside
-      className="hidden lg:flex flex-col w-64 shrink-0 bg-[#2B2118] min-h-screen px-5 py-6"
+      className="hidden lg:flex flex-col w-64 shrink-0 bg-[#2B2118] h-screen px-5 py-6"
       style={{ fontFamily: "'Satoshi', sans-serif" }}
     >
       <div className="px-2 mb-6">
@@ -29,10 +29,10 @@ function Sidebar({ upcomingGrouped = [], onTaskClick }) {
         </div>
       </nav>
 
-      {/* upcoming — moved here from the right rail */}
+      {/* upcoming — scrolls internally if the list gets long */}
       <div className="flex-1 overflow-y-auto min-h-0 -mx-1 px-1">
         <p className="text-xs uppercase tracking-[0.1em] text-[#B8AF9C] font-medium px-2 mb-3">
-          Upcoming Tasks
+          Upcoming
         </p>
 
         {upcomingGrouped.length === 0 && (
