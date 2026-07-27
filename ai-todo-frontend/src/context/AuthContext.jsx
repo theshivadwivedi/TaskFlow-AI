@@ -4,6 +4,31 @@ import * as authService from "../services/authServices";
 
 const AuthContext = createContext(null);
 
+function getStoredRefreshToken() {
+  // Prefer session (non-persistent), fall back to local (remember me)
+  return (
+    sessionStorage.getItem("refreshToken") ||
+    localStorage.getItem("refreshToken") ||
+    null
+  );
+}
+
+function storeRefreshToken(token, remember) {
+  // Clear existing to avoid duplicates
+  sessionStorage.removeItem("refreshToken");
+  localStorage.removeItem("refreshToken");
+  if (remember) {
+    localStorage.setItem("refreshToken", token);
+  } else {
+    sessionStorage.setItem("refreshToken", token);
+  }
+}
+
+function clearStoredTokens() {
+  sessionStorage.removeItem("refreshToken");
+  localStorage.removeItem("refreshToken");
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -13,7 +38,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   async function restoreSession() {
-    const refreshToken = localStorage.getItem("refreshToken");
+    const refreshToken = getStoredRefreshToken();
     if (!refreshToken) {
       setIsLoading(false);
       return;
@@ -25,34 +50,34 @@ export function AuthProvider({ children }) {
       const me = await authService.getCurrentUser();
       setUser(me.data);
     } catch {
-      localStorage.removeItem("refreshToken");
+      clearStoredTokens();
       setAccessToken(null);
     } finally {
       setIsLoading(false);
     }
   }
 
-  function persistSession(data) {
+  function persistSession(data, remember = false) {
     setAccessToken(data.access_token);
-    localStorage.setItem("refreshToken", data.refresh_token);
+    storeRefreshToken(data.refresh_token, remember);
     setUser(data.user);
   }
 
-  async function login(credentials) {
+  async function login(credentials, { remember = false } = {}) {
     const { data } = await authService.login(credentials);
-    persistSession(data);
+    persistSession(data, remember);
     return data;
   }
 
-  async function signup(payload) {
+  async function signup(payload, { remember = false } = {}) {
     const { data } = await authService.signup(payload);
-    persistSession(data);
+    persistSession(data, remember);
     return data;
   }
 
   function logout() {
     setAccessToken(null);
-    localStorage.removeItem("refreshToken");
+    clearStoredTokens();
     setUser(null);
   }
 
