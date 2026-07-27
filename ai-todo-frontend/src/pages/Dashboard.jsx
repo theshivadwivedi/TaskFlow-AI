@@ -38,8 +38,12 @@ function startOfDay(date) {
 }
 
 function Dashboard() {
+<<<<<<< HEAD
   const { user } = useAuth();
   const navigate = useNavigate();
+=======
+  const { user, logout } = useAuth();
+>>>>>>> c346e08b67fe3868abcd7e94cb3fe9f9d23aed83
 
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -165,6 +169,31 @@ function Dashboard() {
     }
   }
 
+<<<<<<< HEAD
+=======
+  const [allTasks, setAllTasks] = useState([]);
+  const [stats, setStats] = useState({ total: 0, pending: 0, in_progress: 0, completed: 0 });
+
+  async function refreshStats() {
+    try {
+      const { data } = await taskService.getTasks();
+      setAllTasks(data);
+      setStats({
+        total: data.length,
+        pending: data.filter((t) => t.status === "pending").length,
+        in_progress: data.filter((t) => t.status === "in_progress").length,
+        completed: data.filter((t) => t.status === "completed").length,
+      });
+    } catch (err) {
+      // Non-critical
+    }
+  }
+
+  useEffect(() => {
+    refreshStats();
+  }, []);
+
+>>>>>>> c346e08b67fe3868abcd7e94cb3fe9f9d23aed83
   const categoryProgress = useMemo(() => {
     const groups = {};
     allTasks.forEach((t) => {
@@ -202,13 +231,19 @@ function Dashboard() {
 
   const maxDueCount = Math.max(1, ...dueThisWeek.map((b) => b.count));
 
+<<<<<<< HEAD
   const upcomingTasks = useMemo(() => {
     return allTasks
+=======
+  const upcomingGrouped = useMemo(() => {
+    const withDates = allTasks
+>>>>>>> c346e08b67fe3868abcd7e94cb3fe9f9d23aed83
       .filter((t) => t.due_date && t.status !== "completed")
       .sort((a, b) => new Date(a.due_date) - new Date(b.due_date))
       .slice(0, 4);
   }, [allTasks]);
 
+<<<<<<< HEAD
 
   const recentTasks = useMemo(() => {
     return [...tasks]
@@ -272,6 +307,74 @@ function Dashboard() {
           <StatTile value={stats.completed} label="Completed" accent="text-[#3F6B4E]" />
         </div>
 
+=======
+  return (
+    <div
+      className="min-h-screen bg-[#F7F3EC]"
+      style={{ fontFamily: "'Satoshi', sans-serif" }}
+    >
+      <Sidebar upcomingGrouped={upcomingGrouped} onTaskClick={openEditModal} />
+
+      {/* mobile-only top bar since sidebar hides below lg */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-30 h-16 bg-[#2B2118] px-5 flex items-center justify-between">
+        <span className="text-white font-bold">
+          TaskFlow <span className="text-[#D9A15B]">AI</span>
+        </span>
+        <button onClick={logout} className="text-[#B8AF9C] hover:text-white transition-colors">
+          <LogOut size={18} />
+        </button>
+      </div>
+
+      {/* fixed header — search + New Task, sits beside sidebar on desktop, below mobile bar on mobile */}
+      <div className="fixed top-16 lg:top-0 left-0 right-0 lg:left-64 z-10 h-20 bg-white border-b border-[#E4DCC8] px-8 flex items-center justify-between gap-4">
+        <div className="relative flex-1 max-w-sm">
+          <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#A6A29C]" />
+          <input
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            placeholder="Search tasks..."
+            className="w-full bg-[#F7F3EC] border border-[#E4DCC8] rounded-lg text-[#2B2118] placeholder:text-[#A6A29C] pl-11 pr-8 py-2.5 text-sm outline-none focus:border-[#5C3A21]/50 transition-colors"
+          />
+          {searchInput && (
+            <button
+              onClick={() => setSearchInput("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#A6A29C] hover:text-[#5C3A21]"
+              aria-label="Clear search"
+            >
+              <X size={14} />
+            </button>
+          )}
+        </div>
+        <button
+          onClick={openCreateModal}
+          className="flex items-center gap-2 bg-[#5C3A21] text-white px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#4A2E19] transition-colors duration-200 shrink-0"
+        >
+          <Plus size={16} strokeWidth={2.5} />
+          New Task
+        </button>
+      </div>
+
+      {/* main content — offset for fixed sidebar (left) and fixed header (top) */}
+      <div className="lg:ml-64 pt-36 lg:pt-20 px-8 pb-8">
+        <p className="text-xs uppercase tracking-[0.15em] text-[#A6A29C] font-medium mb-1 mt-6">
+          {getGreeting()}{user?.name ? `, ${user.name.split(" ")[0]}` : ""}
+        </p>
+        <h2 className="text-[26px] font-bold text-[#2B2118] tracking-tight mb-6">
+          {stats.pending + stats.in_progress > 0
+            ? `${stats.pending + stats.in_progress} task${
+                stats.pending + stats.in_progress === 1 ? "" : "s"
+              } on your plate`
+            : "You're all caught up"}
+        </h2>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+          <StatTile value={stats.total} label="Total" />
+          <StatTile value={stats.pending} label="Pending" accent="text-[#B8863B]" />
+          <StatTile value={stats.in_progress} label="In progress" accent="text-[#5C6B5C]" />
+          <StatTile value={stats.completed} label="Completed" accent="text-[#3F6B4E]" />
+        </div>
+
+>>>>>>> c346e08b67fe3868abcd7e94cb3fe9f9d23aed83
         {categoryProgress.length > 0 && (
           <div className="mb-8">
             <h3 className="text-sm font-semibold text-[#2B2118] mb-3">By category</h3>
@@ -313,9 +416,12 @@ function Dashboard() {
           </div>
         </div>
 
+<<<<<<< HEAD
         <h3 className="text-sm font-semibold text-[#2B2118] mb-3">Recent tasks</h3>
 
         {/* filters + view all */}
+=======
+>>>>>>> c346e08b67fe3868abcd7e94cb3fe9f9d23aed83
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm mb-4">
           <div className="flex items-center gap-2">
             <span className="text-[#A6A29C] mr-1">Priority</span>
@@ -352,6 +458,7 @@ function Dashboard() {
           </div>
 
           {hasActiveFilters && (
+<<<<<<< HEAD
             <button onClick={clearFilters} className="text-red-700/70 hover:text-red-700">
               Clear filters
             </button>
@@ -363,6 +470,15 @@ function Dashboard() {
           >
             View all tasks →
           </button>
+=======
+            <button
+              onClick={clearFilters}
+              className="text-red-700/70 hover:text-red-700 ml-auto"
+            >
+              Clear filters
+            </button>
+          )}
+>>>>>>> c346e08b67fe3868abcd7e94cb3fe9f9d23aed83
         </div>
 
         {error && (
@@ -378,7 +494,13 @@ function Dashboard() {
         {!isLoading && tasks.length === 0 && (
           <div className="text-center py-20">
             <p className="text-[#A6A29C] mb-4 text-sm">
+<<<<<<< HEAD
               {hasActiveFilters ? "No tasks match your filters." : "No tasks yet — create your first one."}
+=======
+              {hasActiveFilters
+                ? "No tasks match your filters."
+                : "No tasks yet — create your first one."}
+>>>>>>> c346e08b67fe3868abcd7e94cb3fe9f9d23aed83
             </p>
             {hasActiveFilters ? (
               <button onClick={clearFilters} className="text-[#5C3A21] text-sm font-semibold hover:underline">
@@ -392,9 +514,15 @@ function Dashboard() {
           </div>
         )}
 
+<<<<<<< HEAD
         {!isLoading && recentTasks.length > 0 && (
           <div className="border border-[#E4DCC8] rounded-xl overflow-hidden divide-y divide-[#E4DCC8] bg-white">
             {recentTasks.map((task) => (
+=======
+        {!isLoading && tasks.length > 0 && (
+          <div className="border border-[#E4DCC8] rounded-xl overflow-hidden divide-y divide-[#E4DCC8] bg-white">
+            {tasks.map((task) => (
+>>>>>>> c346e08b67fe3868abcd7e94cb3fe9f9d23aed83
               <TaskCard
                 key={task.id}
                 task={task}

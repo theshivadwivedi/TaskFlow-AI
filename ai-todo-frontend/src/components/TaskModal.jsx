@@ -8,7 +8,20 @@ const taskSchema = z.object({
   title: z.string().min(1, "Title is required").max(200),
   description: z.string().max(2000).optional().or(z.literal("")),
   category: z.string().max(50).optional().or(z.literal("")),
-  due_date: z.string().optional().or(z.literal("")),
+  due_date: z
+  .string()
+  .optional()
+  .or(z.literal(""))
+  .refine(
+    (val) => {
+      if (!val) return true; // empty is fine — due date is optional
+      const selected = new Date(val + "T00:00:00");
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return selected >= today;
+    },
+    { message: "Due date can't be in the past" }
+  ),
   priority: z.enum(["low", "medium", "high"]),
   status: z.enum(["pending", "in_progress", "completed"]),
 });
@@ -83,8 +96,11 @@ function TaskModal({ initialData, onClose, onSubmit }) {
               <input className={inputClass} placeholder="e.g. Web Dev" {...register("category")} />
             </div>
             <div>
-              <label className={labelClass}>Due Date</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Due Date</label>
               <input type="date" className={inputClass} {...register("due_date")} />
+              {errors.due_date && (
+                <p className="text-sm text-red-500 mt-1">{errors.due_date.message}</p>
+              )}
             </div>
           </div>
 
