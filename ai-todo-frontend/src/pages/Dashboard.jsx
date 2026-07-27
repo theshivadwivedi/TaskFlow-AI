@@ -230,10 +230,10 @@ function Dashboard() {
   }, [allTasks]);
 
   return (
-    <div
-      className="h-screen overflow-hidden flex bg-[#F7F3EC]"
-      style={{ fontFamily: "'Satoshi', sans-serif" }}
-    >
+<div
+  className="min-h-screen flex bg-[#F7F3EC]"
+  style={{ fontFamily: "'Satoshi', sans-serif" }}
+>
       <Sidebar upcomingGrouped={upcomingGrouped} onTaskClick={openEditModal} />
 
       {/* mobile-only top bar since sidebar hides below lg */}
@@ -247,7 +247,7 @@ function Dashboard() {
       </div>
 
     
-      <div className="flex-1 min-w-0 min-h-0 pt-20 lg:pt-0 h-full flex flex-col overflow-hidden">
+      <div className="flex-1 min-w-0 pt-20 lg:pt-0">
  
         <div className="bg-white border-b border-[#E4DCC8] px-8 py-5 flex items-center justify-between gap-4 shrink-0">
           <div className="relative flex-1 max-w-sm">
@@ -385,7 +385,7 @@ function Dashboard() {
         </div>
 
   
-       <div className="flex-1 min-h-0 overflow-y-auto px-8 pb-8">
+      <div className="px-8 pb-8">
           {error && (
             <div className="mb-5 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
               {error}
