@@ -246,9 +246,9 @@ function Dashboard() {
         </button>
       </div>
 
-      {/* main content — fixed height, internal scroll only on the task list */}
-      <div className="flex-1 min-w-0 pt-20 lg:pt-0 h-full flex flex-col overflow-hidden">
-        {/* top header — stays fixed */}
+    
+      <div className="flex-1 min-w-0 min-h-0 pt-20 lg:pt-0 h-full flex flex-col overflow-hidden">
+ 
         <div className="bg-white border-b border-[#E4DCC8] px-8 py-5 flex items-center justify-between gap-4 shrink-0">
           <div className="relative flex-1 max-w-sm">
             <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#A6A29C]" />
@@ -277,7 +277,7 @@ function Dashboard() {
           </button>
         </div>
 
-        {/* fixed section — greeting, stats, category cards, chart, filters */}
+ 
         <div className="px-8 pt-8 pb-4 shrink-0">
           <p className="text-xs uppercase tracking-[0.15em] text-[#A6A29C] font-medium mb-1">
             {getGreeting()}{user?.name ? `, ${user.name.split(" ")[0]}` : ""}
@@ -384,8 +384,8 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* scrolling section — only the task list scrolls */}
-        <div className="flex-1 overflow-y-auto px-8 pb-8">
+  
+       <div className="flex-1 min-h-0 overflow-y-auto px-8 pb-8">
           {error && (
             <div className="mb-5 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
               {error}
