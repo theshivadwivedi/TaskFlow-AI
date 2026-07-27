@@ -12,10 +12,10 @@ function Sidebar({ upcomingGrouped = [], onTaskClick }) {
   }
 
   return (
-    <aside
-      className="hidden lg:flex flex-col w-64 shrink-0 bg-[#2B2118] h-screen px-5 py-6"
-      style={{ fontFamily: "'Satoshi', sans-serif" }}
-    >
+<aside
+  className="hidden lg:flex flex-col w-64 fixed top-0 left-0 h-screen bg-[#2B2118] px-5 py-6 z-20"
+  style={{ fontFamily: "'Satoshi', sans-serif" }}
+>
       <div className="px-2 mb-6">
         <span className="text-white font-bold text-lg tracking-tight">
           TaskFlow <span className="text-[#D9A15B]">AI</span>
